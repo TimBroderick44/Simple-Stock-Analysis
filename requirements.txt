@@ -1,0 +1,7 @@
+pyspark
+pandas
+SQLAlchemy
+Flask
+requests
+python-dotenv
+boto3

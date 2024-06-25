@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Apple Vs Microsoft</title>
+    <link
+      rel="stylesheet"
+      href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+    />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+      .chart-container {
+        width: 100%;
+        height: 400px;
+        margin-bottom: 50px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h2 class="mt-4">Apple Vs Microsoft Stock Analysis</h2>
+      <div class="chart-container">
+        <h4>Daily Averages</h4>
+        <canvas id="dailyAvgChart"></canvas>
+      </div>
+      <div class="chart-container">
+        <h4>Hourly Max Prices</h4>
+        <canvas id="hourlyMaxChart"></canvas>
+      </div>
+      <div class="chart-container">
+        <h4>Daily Volume</h4>
+        <canvas id="dailyVolumeChart"></canvas>
+      </div>
+      <div class="chart-container">
+        <h4>Moving Average Close</h4>
+        <canvas id="movingAvgCloseChart"></canvas>
+      </div>
+    </div>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        fetch("/api/daily_avg")
+          .then((response) => response.json())
+          .then((data) => {
+            const ctx = document
+              .getElementById("dailyAvgChart")
+              .getContext("2d");
+            const labels = data
+              .filter((item) => item.stock_symbol === "AAPL")
+              .map((item) => item.date);
+            const appleData = data
+              .filter((item) => item.stock_symbol === "AAPL")
+              .map((item) => item.avg_close);
+            const microsoftData = data
+              .filter((item) => item.stock_symbol === "MSFT")
+              .map((item) => item.avg_close);
+
+            new Chart(ctx, {
+              type: "line",
+              data: {
+                labels: labels,
+                datasets: [
+                  {
+                    label: "Apple",
+                    data: appleData,
+                    borderColor: "rgba(255, 99, 132, 1)",
+                    borderWidth: 1,
+                    fill: false,
+                  },
+                  {
+                    label: "Microsoft",
+                    data: microsoftData,
+                    borderColor: "rgba(54, 162, 235, 1)",
+                    borderWidth: 1,
+                    fill: false,
+                  },
+                ],
+              },
+              options: {
+                maintainAspectRatio: false,
+                scales: {
+                  x: {
+                    display: false,
+                  },
+                },
+              },
+            });
+          });
+
+        fetch("/api/hourly_max")
+          .then((response) => response.json())
+          .then((data) => {
+            const ctx = document
+              .getElementById("hourlyMaxChart")
+              .getContext("2d");
+            const labels = data
+              .filter((item) => item.stock_symbol === "AAPL")
+              .map((item) => item.hour);
+            const appleData = data
+              .filter((item) => item.stock_symbol === "AAPL")
+              .map((item) => item.max_high);
+            const microsoftData = data
+              .filter((item) => item.stock_symbol === "MSFT")
+              .map((item) => item.max_high);
+
+            new Chart(ctx, {
+              type: "line",
+              data: {
+                labels: labels,
+                datasets: [
+                  {
+                    label: "Apple",
+                    data: appleData,
+                    borderColor: "rgba(255, 99, 132, 1)",
+                    borderWidth: 1,
+                  },
+                  {
+                    label: "Microsoft",
+                    data: microsoftData,
+                    borderColor: "rgba(54, 162, 235, 1)",
+                    borderWidth: 1,
+                  },
+                ],
+              },
+              options: {
+                maintainAspectRatio: false,
+                scales: {
+                  x: {
+                    display: false,
+                  },
+                },
+              },
+            });
+          });
+
+        fetch("/api/daily_volume")
+          .then((response) => response.json())
+          .then((data) => {
+            const ctx = document
+              .getElementById("dailyVolumeChart")
+              .getContext("2d");
+            const labels = data
+              .filter((item) => item.stock_symbol === "AAPL")
+              .map((item) => item.date);
+            const appleData = data
+              .filter((item) => item.stock_symbol === "AAPL")
+              .map((item) => item.total_volume);
+            const microsoftData = data
+              .filter((item) => item.stock_symbol === "MSFT")
+              .map((item) => item.total_volume);
+
+            new Chart(ctx, {
+              type: "bar",
+              data: {
+                labels: labels,
+                datasets: [
+                  {
+                    label: "Apple",
+                    data: appleData,
+                    backgroundColor: "rgba(255, 99, 132, 0.2)",
+                    borderColor: "rgba(255, 99, 132, 1)",
+                    borderWidth: 1,
+                  },
+                  {
+                    label: "Microsoft",
+                    data: microsoftData,
+                    backgroundColor: "rgba(54, 162, 235, 0.2)",
+                    borderColor: "rgba(54, 162, 235, 1)",
+                    borderWidth: 1,
+                  },
+                ],
+              },
+              options: {
+                maintainAspectRatio: false,
+                scales: {
+                  x: {
+                    display: false,
+                  },
+                },
+              },
+            });
+          });
+
+        fetch("/api/moving_avg_close")
+          .then((response) => response.json())
+          .then((data) => {
+            const ctx = document
+              .getElementById("movingAvgCloseChart")
+              .getContext("2d");
+            const labels = data
+              .filter((item) => item.stock_symbol === "AAPL")
+              .map((item) => item.timestamp);
+            const appleData = data
+              .filter((item) => item.stock_symbol === "AAPL")
+              .map((item) => item.moving_avg_close);
+            const microsoftData = data
+              .filter((item) => item.stock_symbol === "MSFT")
+              .map((item) => item.moving_avg_close);
+
+            new Chart(ctx, {
+              type: "line",
+              data: {
+                labels: labels,
+                datasets: [
+                  {
+                    label: "Apple",
+                    data: appleData,
+                    borderColor: "rgba(255, 99, 132, 1)",
+                    borderWidth: 1,
+                    fill: false,
+                  },
+                  {
+                    label: "Microsoft",
+                    data: microsoftData,
+                    borderColor: "rgba(54, 162, 235, 1)",
+                    borderWidth: 1,
+                    fill: false,
+                  },
+                ],
+              },
+              options: {
+                maintainAspectRatio: false,
+                scales: {
+                  x: {
+                    display: false,
+                  },
+                },
+              },
+            });
+          });
+      });
+    </script>
+  </body>
+</html>
