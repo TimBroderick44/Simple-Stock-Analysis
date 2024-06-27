@@ -14,6 +14,7 @@ The visualizations available to the user include:
   - [Table of Contents](#table-of-contents)
   - [Screenshots](#screenshots)
   - [Highlights](#highlights)
+  - [How to Get Started?](#how-to-get-started)
   - [Lessons Learned](#lessons-learned)
   - [Difficulties](#difficulties)
   - [Future Implementations](#future-implementations)
@@ -33,6 +34,25 @@ The visualizations available to the user include:
 - Stores and retrieves data from an AWS S3 bucket.
 - Visualizes data using Chart.js for interactive and informative charts.
 - Flask backend is served on an AWS EC2 instance. 
+
+## How to Get Started? 
+
+  1. Create an AWS account (https://aws.amazon.com/console/)
+  2. Setup a (free) EC2 instance:
+     1. Create a name for your instance
+     2. For the OS Image, leave as Amazon Linux (if you do select something else, be aware there could be costs involved)
+     3. Leave the architecture and the instance type as 64-bit (x86) and t2.micro
+     4. Create a Key Pair (a file that will allow you access AWS services, etc.):
+        1. Name: simple-stock-analysis (anything is fine though)
+        2. Select RSA and .pem for the filetype
+     5. Network Settings:
+        1. Leave all settings as they are.
+        2. Allow SSH traffic from --> "My IP" (allows only your IP access)
+     6. Storage:
+        1. Feel free to add more than 8GiB but 8Gib will be more than enough. 
+     7. Advanced Settings can be skipped
+     8. Review the Summary and "Launch Instance"
+  3. Using Git Bash 
 
 ## Lessons Learned
 
