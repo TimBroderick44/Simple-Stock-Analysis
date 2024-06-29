@@ -140,7 +140,17 @@ Follow these steps to set up and run the project:
        aws configure
        ```
 
-  3. **Run the Process Data Script**:
+  3. **Power up! (Optional)**:
+     - Within 'process_data.py', look for:
+        ```python
+        executor_memory = "4g" 
+        driver_memory = "4g" 
+        executor_cores = "3"
+        cores_max = "3"
+        ```  
+      - If your available system resources exceed the above (or are below the above), feel free to update the above values. (Higher values will positively influence the performance)
+
+  4. **Run the Process Data Script**:
      - Run the following command to process the data locally and upload the results back to the S3 bucket:
        ```bash
        python process_data.py
