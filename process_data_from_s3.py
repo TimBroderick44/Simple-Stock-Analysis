@@ -7,6 +7,8 @@ from pyspark.sql import SparkSession
 import boto3
 from dotenv import load_dotenv
 
+import time
+
 # Set up logging / Pinpoint where errors were happening
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -15,13 +17,40 @@ logger = logging.getLogger(__name__)
 hadoop_aws_jar = "jars/hadoop-aws-3.2.2.jar"
 aws_sdk_bundle_jar = "jars/aws-java-sdk-bundle-1.11.901.jar"
 
+load_dotenv()
 amazon_key = os.getenv('AMAZON_ACCESS_KEY')
 secret_key = os.getenv('AMAZON_SECRET_KEY')
+
+executor_memory = "4g" 
+driver_memory = "4g" 
+executor_cores = "3"
+cores_max = "3"  
+
+# Multi-core setup execution time: 53.03 seconds
+
+# executor_memory = "4g" 
+# driver_memory = "4g" 
+# executor_cores = "2"
+# cores_max = "2"   
+
+# Multi-core setup execution time: 62.55 seconds
+
+# executor_memory = "1g" 
+# driver_memory = "1g" 
+# executor_cores = "1"
+# cores_max = "1"   
+
+# Multi-core setup execution time: 79.08 seconds
 
 try:
     logger.info("Initializing Spark session")
     spark = SparkSession.builder \
         .appName('AppleVsMicrosoft') \
+        .config("spark.master", "local[*]") \
+        .config("spark.executor.memory", executor_memory) \
+        .config("spark.driver.memory", driver_memory) \
+        .config("spark.executor.cores", executor_cores) \
+        .config("spark.cores.max", cores_max) \
         .config("spark.jars", f"{hadoop_aws_jar},{aws_sdk_bundle_jar}") \
         .config("spark.hadoop.fs.s3a.access.key", amazon_key) \
         .config("spark.hadoop.fs.s3a.secret.key", secret_key) \
@@ -33,6 +62,8 @@ try:
 except Exception as e:
     logger.error("Failed to initialize Spark session", exc_info=True)
     raise
+
+start_time = time.time()
 
 bucket_name = 'simple-stock-analysis'
 s3_path_apple = f"s3a://{bucket_name}/AAPL_minute_data.csv"
@@ -135,7 +166,7 @@ def save_and_move_to_s3(df, bucket_name, file_name):
                 s3.copy(copy_source, bucket_name, file_name)
                 logger.info(f"Moved and renamed {file_name} to root directory")
                 
-        # Delete the temp directory
+        # Delete the temp directory (and the success files inside)
         for obj in response.get('Contents', []):
             s3.delete_object(Bucket=bucket_name, Key=obj['Key'])
 
@@ -157,3 +188,11 @@ try:
 except Exception as e:
     logger.error("Failed to stop Spark session", exc_info=True)
     raise
+
+end_time = time.time()
+
+## How long did this script take to run?
+
+print("Multi-core setup execution time: {:.2f} seconds".format(end_time - start_time))
+
+
