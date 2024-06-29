@@ -9,7 +9,7 @@ from flask_cors import CORS
 import secrets
 
 app = Flask(__name__, static_folder='build', static_url_path='')
-CORS(app)
+CORS(app, resources={r"/*": {"origins": "*"}}) 
 
 JWT_SECRET_KEY = secrets.token_urlsafe(32)
 app.config['JWT_SECRET_KEY'] = JWT_SECRET_KEY
