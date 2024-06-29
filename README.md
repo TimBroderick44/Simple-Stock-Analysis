@@ -3,6 +3,8 @@
 
 This full-stack Python web application fetches the most recent minute-by-minute stock data on Microsoft and Apple from the Alpha Vantage API and stores the received data in an AWS S3 bucket. It retrieves the data from the bucket, processes the data (locally) using Spark, and then returns the resulting processed data back to the S3 bucket. The data is finally visualized using Chart.js on a Flask web server hosted on an AWS EC2 instance. 
 
+### Update: [There is now a (much nicer) React / TS frontend available for this project.](https://github.com/TimBroderick44/Simple-Stock-Analysis-React-Frontend) 
+
 The visualizations available to the user include:
 - Daily average closing prices
 - Hourly maximum prices
