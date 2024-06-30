@@ -19,6 +19,11 @@ jwt = JWTManager(app)
 dynamodb = boto3.resource('dynamodb', region_name='ap-southeast-2')
 table = dynamodb.Table('users')
 
+## Why do we need BytesIO?
+# obj creates a stream of bytes; however pandas.read_csv expects a file-like object
+# BytesIO creates a wrapper around the stream of bytes so that it appears as a file-like object
+# Essentially, we are creating a virtual file in memory that pandas can read from
+
 def read_from_s3(bucket_name, file_name):
     s3 = boto3.client('s3')
     obj = s3.get_object(Bucket=bucket_name, Key=file_name)
@@ -53,6 +58,7 @@ def logout():
 @app.route('/api/daily_avg', methods=['GET'])
 def get_daily_avg():
     df = read_from_s3(bucket_name, 'daily_avg.csv')
+    # orient='records' creates a dictionary where each row is a record
     return jsonify(df.to_dict(orient='records'))
 
 @app.route('/api/hourly_max', methods=['GET'])
