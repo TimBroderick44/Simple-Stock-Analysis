@@ -32,6 +32,7 @@ The frontend is built with React and TypeScript, ensuring a responsive and dynam
 
 ![Home Page](./assets/react.png)
 ![Daily Averages](./assets/daily_react.png)
+![Hourly Averages](./assets/hourly.png)
 ![Loading](./assets/loading.png)
 ![Moving Average](./assets/moving.png)
 

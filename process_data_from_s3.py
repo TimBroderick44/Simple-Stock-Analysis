@@ -149,7 +149,6 @@ except Exception as e:
 
 def save_and_move_to_s3(df, bucket_name, file_name):
     s3_temp_path = f"s3a://{bucket_name}/temp/{file_name}"
-    final_s3_path = f"s3a://{bucket_name}/{file_name}"
     s3 = boto3.client('s3')
 
     try:
