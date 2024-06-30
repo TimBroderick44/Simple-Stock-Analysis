@@ -1,6 +1,12 @@
 # Apple Vs Microsoft
 (https://tim-broderick.com/applevsmicrosoft)
 
+### Note: ### 
+This repo does NOT contain the React / TS frontend.
+Please visit: [this repo for more information](https://github.com/TimBroderick44/Simple-Stock-Analysis-React-Frontend)
+
+## Description:
+
 This comprehensive full-stack Python web application begins by fetching the latest minute-by-minute stock data for Microsoft and Apple from the Alpha Vantage API. The fetched data is then securely stored in an AWS S3 bucket. Utilizing Apache Spark for local processing, the application retrieves the stock data from the S3 bucket, performs necessary data transformations and analyses, and subsequently saves the processed data back to the S3 bucket.
 
 On the backend, the application is powered by a Flask web server, which is hosted on an AWS EC2 instance. This server facilitates JWT authentication, with user credentials securely managed in AWS DynamoDB.
@@ -245,18 +251,21 @@ Follow these steps to set up and run the project:
        python app.py
        ```
 
-  2. **Access the Application**:
-     - Open your browser and navigate to `http://<your-ec2-public-dns>:5000` to access the application.
+  2. **Test Access to the Application**:
+     - Open your browser and navigate to `http://<your-ec2-public-dns>:5000/api/daily_avg`. If you see JSON data, you have access and can proceed. 
 </details>
 
 <details>
   <summary>Setting Up the React Frontend</summary>
+  
+  1. **Ensure Access to the React / TS Repo**:
+     - [Make sure to have visited this repo](https://github.com/TimBroderick44/Simple-Stock-Analysis-React-Frontend)
 
-  1. **Transfer React Build Files**:
+  2. **Transfer React Build Files**:
      - Ensure your React app is built using `npm run build`.
      - Transfer the contents of the `build` folder to the EC2 instance.
 
-  2. **Serve the React App with Flask**:
+  3. **Serve the React App with Flask**:
      - Ensure `app.py` is set up to serve the React app as shown in the previous steps.
      - Access the application using the public DNS of your EC2 instance.
 </details>
@@ -312,4 +321,5 @@ To keep the app running even when the terminal is closed, consider using [tmux](
 - Implementing real-time data updates for the charts.
 - Making greater use of AWS services. 
 
-Thank you
+Thanks for having a look and please feel free to reach out, if there are any queries. 
+[Tim Broderick]
