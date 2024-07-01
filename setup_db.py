@@ -3,8 +3,7 @@ from passlib.hash import pbkdf2_sha256
 
 dynamodb = boto3.resource('dynamodb', region_name='ap-southeast-2')
 
-def create_table_if_not_exists():
-    # Flipped so that creation is not first but the check is first
+def create_table():
     try:
         table = dynamodb.Table('users')
         table.meta.client.describe_table(TableName='users')
@@ -27,16 +26,15 @@ def create_table_if_not_exists():
         )
         table.meta.client.get_waiter('table_exists').wait(TableName='users')
         print("Table 'users' created successfully.")
-        
-# SHA256 with PBKDF2:
-# - SHA256 is a cryptographic hash function that takes an input and produces a fixed-size string of bytes
-# - PBKDF2 takes SHA256 and adds a salt to make it computationally intensive to brute force
 
 def hash_password(password):
-    # in the config generated, the second part is the salt. 
-    # e.g. $pbkdf2-sha256$29000$O3lE1P/Eb6R/CZH2qO6vKA$6TziYke8al6DhrKZmhBN19tsJQZ3U64KZGRk/WUKBC8
-    salt = pbkdf2_sha256.genconfig().split('$')[2] 
+    # SHA256 with PBKDF2:
+    # - SHA256 is a cryptographic hash function that takes an input and produces a fixed-size string of bytes
+    # - PBKDF2 takes SHA256 and adds a salt to make it computationally intensive to brute force
+    
+    # in the config generated, the third part is the salt. 
     password_hash = pbkdf2_sha256.hash(password)
+    salt = password_hash.split('$')[3] 
     return password_hash, salt
 
 def setup_users():
@@ -58,5 +56,5 @@ def setup_users():
     print("Users inserted successfully.")
 
 if __name__ == "__main__":
-    create_table_if_not_exists()
+    create_table()
     setup_users()

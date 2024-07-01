@@ -44,7 +44,7 @@ cores_max = "3"
 # Multi-core setup execution time: 79.08 seconds
 
 def handle_exceptions(func):
-    # Preserve the original function's name and docstring
+    # Preserve the original function's info.
     @wraps(func)
     def wrapper(*args, **kwargs):
         try:
@@ -55,7 +55,8 @@ def handle_exceptions(func):
     return wrapper
 
 @contextmanager
-def spark_session_context(app_name, config):
+# sets up "__enter__" and "__exit__" methods for the context manager
+def spark_context(app_name, config):
     try:
         logger.info("Initializing Spark session")
         spark = SparkSession.builder.appName(app_name)
@@ -64,6 +65,7 @@ def spark_session_context(app_name, config):
         spark = spark.getOrCreate()
         yield spark
     except Exception as e:
+        #exc_info = True => include the exception information in the log
         logger.error("Failed to initialize Spark session", exc_info=True)
         raise
     finally:
@@ -183,7 +185,7 @@ start_time = time.time()
 
 # with keyword = shows the context manager where to '__enter__' and '__exit__' the code. 
 
-with spark_session_context("AppleVsMicrosoft", spark_config) as spark:
+with spark_context("AppleVsMicrosoft", spark_config) as spark:
     df_apple = read_data_from_s3(spark, s3_path_apple)
     df_microsoft = read_data_from_s3(spark, s3_path_microsoft)
     df = df_apple.union(df_microsoft)

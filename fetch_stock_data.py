@@ -35,7 +35,10 @@ def save_to_s3(df, bucket_name, file_name):
     ## StringIO => In-memory file-like object
     ## This is needed to pass the CSV data to boto3
     ## Don't need to use Pandas but allows for easier conversation to CSV and with StringIO can create an in-memory CSV
+    
+    # Create one in-memory file-like object
     csv_buffer = StringIO()
+    # The path is the in-memory object and don't want an index. 
     df.to_csv(csv_buffer, index=False)
     s3_resource = boto3.resource('s3')
     s3_resource.Object(bucket_name, file_name).put(Body=csv_buffer.getvalue())
